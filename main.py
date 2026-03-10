@@ -1,9 +1,9 @@
 #WIP
 from flask import Flask, render_template, request
 import requests
-
+from tinydb import TinyDB, Query
 app = Flask(__name__)
-
+odb=TinyDB('obiskovalci.json')
 @app.route('/')
 def index():   
     # Pridobi IP naslov obiskovalca 
@@ -13,20 +13,21 @@ def index():
         ip = request.remote_addr  
         
     print(f"Debug IP: {ip}")  # Za debugging 
+    #debugip
+    ip="8.8.8.8"
+    geo_response = requests.get(f"https://freeipapi.com/api/json/{ip}") 
+    geo_data = geo_response.json()
+    country=geo_data.get('countryName')
+    city = geo_data.get('cityName')
     
-    ip = "8.8.8.8" 
 
-    try:
-        geo_response = requests.get(f"https://freeipapi.com/api/json/{ip}")
-        geo_response.raise_for_status() 
-        
-        geo_data = geo_response.json()
-        city = geo_data.get('cityName', 'Neznano mesto')
-        
-        return f"Vaš IP je {ip} in prihajate iz mesta: {city}."
-        
-    except requests.RequestException as e:
-        return f"Prišlo je do napake pri API klicu: {e}", 500
-
+    odb.insert({'ip':ip, 'country':country, 'city':city})
+    return render_template(index.html, geo_response=geo_response, ip=ip, country=country, city=city)
+    
+    return f"Vaš IP je {ip} in prihajate iz mesta: {city}."
+@app.route('/obiskovalci')
+def obiski():
+    vsi_obiskovalci = odb.all()
+    return render_template(obiski.html, obiski=vsi_obiskovalci)
 if __name__ == '__main__':
     app.run(debug=True)
