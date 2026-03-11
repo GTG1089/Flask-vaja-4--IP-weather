@@ -1,8 +1,26 @@
 <!DOCTYPE html>
-<html>
-<head><title>"Vaja 4 flask"</title></head>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <title>Podatki o obiskovalcu</title>
+</head>
 <body>
+    <h1>Yo.</h1>
     
-</body>
+    <h3>DAT:</h3>
+    <ul>
+        <li><strong>IP:</strong> {{ ip }}</li>
+        <li><strong>CNTRY:</strong> {{ country }}</li>
+        <li><strong>CTY:</strong> {{ city }}</li>
+    </ul>
 
+    <h3>WEATHER:</h3>
+    <ul>
+        <li><strong>Desc:</strong> {{weatherdesc}}</li>
+        <li><strong>Temp:</strong> {{temp}} °C</li>
+        <li><strong>Hum:</strong> {{humidity}} %</li>
+        <li><strong>wind:</strong> {{wind}} km/h</li>
+        <li><strong>precipitation:</strong> {{precipitation}} mm</li>
+    </ul>
+</body>
 </html>
